@@ -1,1 +1,34 @@
-<!-- This is the home page of the website -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Welcome</title>
+	</head>
+	<body>
+		<div>
+			<h1>Welcome!</h1>
+		</div>
+		
+		<div>
+			<h2>Game</h2>
+		</div>
+		<div>
+			<h2>Game Instructions</h2>
+			<p>
+				Game instructions coming soon!
+			</p>
+		</div>
+		<div>
+			<h2>Comments</h2>
+			<div id="disqus_thread"></div>
+
+			<script>
+				(function() {
+					var d = document, s = d.createElement('script');
+					s.src = 'https://nau-cs413.disqus.com/embed.js';
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+				})(); 
+			</script>
+		</div>
+	</body>
+</html>
