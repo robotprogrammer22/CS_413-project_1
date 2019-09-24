@@ -1,5 +1,8 @@
 /*
 TO DO:
+
+	fix bug so it is not placed at a decimal or where the bird can't get it
+
 	add keyboard input
 	place bug somewhere that they have to collect
 	write code so they can collect the bug
@@ -47,6 +50,9 @@ var stage = new PIXI.Container();
 var bird_texture = PIXI.Texture.fromImage("images/bird-100px-copy.png");
 var bird = new PIXI.Sprite(bird_texture);
 
+var bug_texture = PIXI.Texture.fromImage("images/beetle.png");
+var bug = new PIXI.Sprite(bug_texture);
+
 gameport.appendChild(renderer.view);
 
 bird.anchor.x = 0.5;
@@ -61,12 +67,23 @@ bird.scale.y = 0.65;
 stage.addChild(bird);
 
 
+bug.anchor.x = 0.5;
+bug.anchor.y = 0.5;
+
+bug.scale.x = 1;
+bug.scale.y = 1;
+
+
 game_map = [10][10];
 // squares are numbered 0-9
+// squares the bird can go in are 1-8
 current_x_square = 4;
 current_y_square = 4;
 current_location_x = 180;
 current_location_y = 180;
+
+bug_x = 0;
+bug_y = 0;
 
 // for a 400 x 400 grid with 10 spaces each way, each square should be 40 pixels
 // need to place in the middle of those squares, so start off with 40 * square_number + 20?
@@ -76,10 +93,34 @@ current_location_y = 180;
 
 
 function placeBug()
-{
-	x_position = Math.random();
-	//* ((high+1)-low)) + low
+{	
+	// randomly chooses a square between 1-8 (inclusive)
+	// math.round rounds to the nearest integer
+	bug_x_square = Math.round(((Math.random()) * 7) + 1);
+	bug_y_square = Math.round(((Math.random()) * 7) + 1);
+	
+	
+	bug_x = bug_x_square * 40 + 20;
+	bug_y = bug_y_square * 40 + 20;
+	
+	bug.position.x = bug_x;
+	bug.position.y = bug_y;
+	
+	//console.log(bug_x);
+	//console.log(bug_y);
+	
+	stage.addChild(bug);
 }
+
+function bugCollected()
+{
+	if ((bug_x == current_location_x) && (bug_y == current_location_y))
+	{
+		stage.removeChild(bug);
+		placeBug();
+	}
+}
+
 
 function moveDown(current_x, current_y)
 {
@@ -96,7 +137,9 @@ function moveDown(current_x, current_y)
 
 function moveLeft(current_x, current_y)
 {
-		if (current_x > 60)
+	bird.scale.x = 0.65;
+	
+	if (current_x > 60)
 	{
 		current_location_x = current_x - 40;
 		current_x_square -= 1;
@@ -106,7 +149,8 @@ function moveLeft(current_x, current_y)
 
 function moveRight(current_x, current_y)
 {
-		if (current_x < 340)
+	bird.scale.x = -0.65;
+	if (current_x < 340)
 	{
 		current_location_x = current_x + 40;
 		current_x_square += 1;
@@ -125,18 +169,47 @@ function moveUp(current_x, current_y)
 	}
 }
 
+function keyPress(key)
+{
+	if (key.keyCode == 87)
+	{
+		moveUp(current_location_x, current_location_y);
+	}
+	
+	if (key.keyCode == 65)
+	{
+		moveLeft(current_location_x, current_location_y);
+	}
+	
+	if (key.keyCode == 83)
+	{
+		moveDown(current_location_x, current_location_y);
+	}
+	
+	if (key.keyCode == 68)
+	{
+		moveRight(current_location_x, current_location_y);
+	}
+}
 
+/*
 setInterval(function(){
 	//moveDown(current_location_x, current_location_y);
 	//moveUp(current_location_x, current_location_y);
 	//moveRight(current_location_x, current_location_y);
 	moveLeft(current_location_x, current_location_y);
 }, 3000);
+*/
+
+
+document.addEventListener("keydown", keyPress);
+placeBug();
 
 function animate()
 {
 	requestAnimationFrame(animate);
 	//bird.rotation += 0.1;
+	bugCollected();
 	renderer.render(stage);
 }
 animate();
