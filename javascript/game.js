@@ -1,49 +1,3 @@
-/*
-TO DO:
-
-	fix bug so it is not placed at a decimal or where the bird can't get it
-
-	add keyboard input
-	place bug somewhere that they have to collect
-	write code so they can collect the bug
-	should the bug move?
-	bug might be optional, just moving the bird might be good enough
-	make a border for the game
-	fix the bird so it doesn't go off the screen (might be fixed by changing bird size so it's not so big and maybe not letting it enter the squares on the side?)
-		also make the grid a 8 x 8 grid and save the other squares for the border and put the border as far as you can go to the wall
-		could also just increase the size of the game board by one square
-	fix the scale for the bird and the game window (was on the last quiz, is that on the transform stuff?)
-		use setTransform for this, don't redraw or rescale the image again
-		could setTransform be used to change the scale and then continue with what is being done?
-	change the set interval loop to a game loop thing?? (optional, just make it work first, then optimize)
-	game score thing?
-	use set transform instead of manually setting position
-		still need to do calculations, but seting the x and y manually might not be the best way?
-	game sound???
-		like something when an item is collected
-		
-	need to add icon
-		
-	maybe remove the parameters of the function
-		it can just access them on its own and is doing that to change it right now
-	
-	
-	mirror bird image for when going right and change spites if it is on the other one? or just rerender the same sprite?
-	
-	
-	border art:
-		flowers?? trees? bush?
-		make 40 pixels long, not sure how wide (each square is 40 pixels)
-		just make one really long element that covers the whole grid length
-		maybe just make a small section and use the selection tool to make duplicates until the right length is reached
-		
-		
-	future art update, have the bird be flying and land in each square if there's a long enough pause between key presses?
-		have one image for wings open, have another for flapping
-*/
-
-
-
 var gameport = document.getElementById("gameport");
 var renderer = PIXI.autoDetectRenderer({width: 400, height: 400, backgroundColor: 0xf5fcf7});
 var stage = new PIXI.Container();
@@ -125,8 +79,7 @@ function bugCollected()
 function moveDown(current_x, current_y)
 {
 	// checks to see if already in top square
-	// 380 is the center of the top square
-	//if (current_y < 380)
+	// 340 is the center of the top square
 	if (current_y < 340)
 	{
 		current_location_y = current_y + 40;
@@ -191,15 +144,6 @@ function keyPress(key)
 		moveRight(current_location_x, current_location_y);
 	}
 }
-
-/*
-setInterval(function(){
-	//moveDown(current_location_x, current_location_y);
-	//moveUp(current_location_x, current_location_y);
-	//moveRight(current_location_x, current_location_y);
-	moveLeft(current_location_x, current_location_y);
-}, 3000);
-*/
 
 
 document.addEventListener("keydown", keyPress);
